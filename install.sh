@@ -96,6 +96,8 @@ VSIX_URL=$(node -e "
   }).on('error', e => { console.error('  \x1b[31m[error]\x1b[0m Could not reach GitHub: ' + e.message); process.exit(1); });
 ") || VSIX_URL=""
 
+INSTALLED=false
+
 if [ -z "$VSIX_URL" ]; then
   echo "  \033[31m[fail]\033[0m Could not fetch .vsix from GitHub releases"
   echo "         Install manually: https://github.com/$REPO/releases"
@@ -107,6 +109,7 @@ else
     if code --install-extension "$VSIX_TMP" --force >/dev/null 2>&1; then
       echo "  [ok] Extension installed"
       rm -f "$VSIX_TMP"
+      INSTALLED=true
     else
       echo "  \033[33m[info]\033[0m 'code' CLI not in PATH. Install manually:"
       echo "         1. Open VSCode → Cmd+Shift+P → 'Shell Command: Install code command in PATH'"
@@ -120,5 +123,9 @@ else
 fi
 
 echo ""
-echo "  Done! Restart Claude Code and open the Clocked AI panel in VSCode."
+if [ "$INSTALLED" = true ]; then
+  echo "  Done! Restart Claude Code and open the Clocked AI panel in VSCode."
+else
+  echo "  Hooks are ready. Install the extension above, then restart Claude Code."
+fi
 echo ""
