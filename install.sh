@@ -104,7 +104,7 @@ if [ -z "$VSIX_URL" ]; then
   echo "         Or build it: git clone https://github.com/$REPO && cd clocked-ai && npm install && npm run package"
   echo "         Then: code --install-extension clocked-ai-*.vsix"
 else
-  VSIX_TMP=$(mktemp /tmp/clocked-XXXXXX.vsix)
+  VSIX_TMP="$(mktemp /tmp/clocked-XXXXXX).vsix"
   if curl -fsSL -o "$VSIX_TMP" "$VSIX_URL"; then
     if code --install-extension "$VSIX_TMP" --force >/dev/null 2>&1; then
       echo "  [ok] Extension installed"
